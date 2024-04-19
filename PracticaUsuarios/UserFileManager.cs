@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -76,6 +78,67 @@ namespace PracticaUsuarios
 
 							// Mostrar el nombre del usuario en la consola
 							Console.WriteLine(name);
+						}
+					}
+					else
+					{
+						Console.WriteLine("No se encontraron archivos de usuario.");
+					}
+				}
+				else
+				{
+					Console.WriteLine("El directorio de usuarios no existe.");
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Error al intentar listar los usuarios: {ex.Message}");
+			}
+		}
+
+		public void GetTop10OldestUsers()
+		{
+			// Ruta completa del directorio donde se guardan los archivos
+			String directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DirectoryPath);
+
+			try
+			{
+				// Verificar si el directorio existe
+				if (Directory.Exists(directoryPath))
+				{
+					// Obtener la lista de archivos de usuario
+					String[] files = Directory.GetFiles(directoryPath, $"{FileNamePrefix}_*.txt");
+
+					if (files.Any())
+					{
+						// Crear una lista para almacenar la información de los usuarios
+						List<(DateTime DateOfBirth, String Name)> users = new List<(DateTime DateOfBirth, String Name)>();
+
+						// Iterar sobre cada archivo
+						foreach (String file in files)
+						{
+							// Leer el contenido del archivo
+							String[] lines = File.ReadAllLines(file);
+
+							// Obtener la fecha de nacimiento del usuario del contenido del archivo
+							String[] userInfo = lines[1].Split(',');
+							String name = userInfo[2].Trim() + " " + userInfo[3].Trim();
+							DateTime dateOfBirth = DateTime.ParseExact(userInfo[6].Trim(), "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
+
+							// Agregar la información del usuario a la lista
+							users.Add((dateOfBirth, name));
+						}
+
+						// Ordenar la lista de usuarios por fecha de nacimiento
+						IOrderedEnumerable<(DateTime DateOfBirth, String Name)> sortedUsers = users.OrderBy(u => u.DateOfBirth);
+
+						// Mostrar los nombres de los usuarios ordenados por fecha de nacimiento
+						Console.WriteLine("Top 10 usuarios más viejos:");
+						Int32 count = 1;
+						foreach ((DateTime DateOfBirth, String Name) user in sortedUsers.Take(10))
+						{
+							Console.WriteLine($"{count}. {user.Name} - Fecha de nacimiento: {user.DateOfBirth.ToShortDateString()}");
+							count++;
 						}
 					}
 					else

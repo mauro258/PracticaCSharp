@@ -7,6 +7,8 @@ namespace PracticaUsuarios
 	{
 		static async Task Main(String[] args)
 		{
+			UserFileManager userFileManager = new UserFileManager();
+
 
 			// Instancia del cliente de la API de usuario
 			UserApiClient userApiClient = new UserApiClient();
@@ -42,16 +44,17 @@ namespace PracticaUsuarios
 						Console.WriteLine("--------------------------------");
 						// Opción para consultar usuarios por nombre
 						// Crear una instancia de UserFileManager
-						UserFileManager userFileManager = new UserFileManager();
 						// Llamar al método ListUsersByName para listar los usuarios por nombre
 						userFileManager.ListUsersByName();
-						await Task.Delay(5000);
-						// Limpia la consola
-						Console.Clear();
+						Console.WriteLine("Presione cualquier tecla para continuar");
+						Console.ReadKey();
 						break;
 					case 3:
-						// Opción para consultar el top 10 por fecha de nacimiento
-						Console.WriteLine("Seleccionaste la opción 3");
+						//// Obtén el top 10 de los usuarios más antiguos
+						userFileManager.GetTop10OldestUsers();
+						Console.WriteLine("Presione cualquier tecla para continuar");
+						Console.ReadKey();
+
 						break;
 					case 4:
 						// Opción para salir del programa
