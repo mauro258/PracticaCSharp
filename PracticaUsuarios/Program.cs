@@ -34,8 +34,8 @@ namespace PracticaUsuarios
 					case 1:
 						// Opción para guardar los datos de un usuario aleatorio
 						await userApiClient.GetUserAndPrintDetails();
-						// Espera  segundos antes de limpiar la consola
-						await Task.Delay(5000);
+						Console.WriteLine("Presione cualquier tecla para continuar");
+						Console.ReadKey();
 						// Limpia la consola
 						Console.Clear();
 						break;
@@ -48,12 +48,16 @@ namespace PracticaUsuarios
 						userFileManager.ListUsersByName();
 						Console.WriteLine("Presione cualquier tecla para continuar");
 						Console.ReadKey();
+						Console.Clear();
+
 						break;
 					case 3:
 						//// Obtén el top 10 de los usuarios más antiguos
 						userFileManager.GetTop10OldestUsers();
 						Console.WriteLine("Presione cualquier tecla para continuar");
 						Console.ReadKey();
+						Console.Clear();
+
 
 						break;
 					case 4:
